@@ -19,15 +19,16 @@ if ($conn->connect_error) {
 
 $user_id = $_SESSION['user_id'];
 
-// Fetch emails from the inbox
+// Fetch emails from the inbox but exclude those sent by the logged-in user to others
 $stmt = $conn->prepare("
-    SELECT emails.id, emails.subject, emails.body, users.username as sender 
+    SELECT emails.id, emails.subject, emails.body, users.email as sender_email
     FROM inbox 
     JOIN emails ON inbox.email_id = emails.id 
     JOIN users ON emails.sender_id = users.id 
-    WHERE inbox.user_id = ?
+    WHERE inbox.user_id = ? AND (emails.sender_id != ? OR emails.receiver_id = ?)
+    ORDER BY emails.id DESC
 ");
-$stmt->bind_param("i", $user_id);
+$stmt->bind_param("iii", $user_id, $user_id, $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -83,7 +84,7 @@ $conn->close();
                 <div class="email-list" id="email-list">
                     <?php foreach ($emails as $email): ?>
                         <div class="email-item">
-                            <div class="email-sender"><?php echo htmlspecialchars($email['sender']); ?></div>
+                            <div class="email-sender"><?php echo htmlspecialchars($email['sender_email']); ?></div>
                             <div class="email-subject"><?php echo htmlspecialchars($email['subject']); ?></div>
                             <div class="email-snippet"><?php echo htmlspecialchars(substr($email['body'], 0, 50)); ?>...</div>
                         </div>

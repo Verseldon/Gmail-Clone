@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bind_param("ii", $receiver_id, $email_id);
             $stmt->execute();
 
-            // If the sender and receiver are the same, skip the additional insertion
+            // Only insert record into inbox table for the sender if they are different from the receiver
             if ($receiver_id != $sender_id) {
                 // Insert record into inbox table for the sender
                 $stmt = $conn->prepare("INSERT INTO inbox (user_id, email_id) VALUES (?, ?)");
