@@ -1,0 +1,184 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const mainPage = document.getElementById('main-page');
+    if (!mainPage) return;
+
+    const sidebarItems = document.querySelectorAll('.sidebar-item');
+    const emailList = document.getElementById('email-list');
+    const composeEmail = document.getElementById('compose-email');
+    const emailDetail = document.getElementById('email-detail');
+    const composeButton = document.getElementById('compose-button');
+    const sendButton = document.getElementById('send-button');
+    const backButton = document.getElementById('back-button');
+    const saveDraftButton = document.createElement('button');
+    saveDraftButton.textContent = 'Save Draft';
+    saveDraftButton.id = 'save-draft-button';
+
+    // Append Save Draft button to compose form
+    document.getElementById('compose-form').appendChild(saveDraftButton);
+
+    // Example email data
+    const emails = {
+        inbox: [
+            { id: 1, sender: 'Alice', subject: 'Meeting', body: 'Let’s schedule a meeting.' },
+            { id: 2, sender: 'Bob', subject: 'Project Update', body: 'Here’s the latest update on the project.' }
+        ],
+        starred: [],
+        sent: [
+            { id: 3, sender: 'You', subject: 'Invoice', body: 'Please find the invoice attached.' }
+        ],
+        drafts: [
+            { id: 4, sender: 'You', subject: 'Draft Email', body: 'This is a draft email.' }
+        ],
+        trash: []
+    };
+
+    sidebarItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const section = item.getAttribute('data-section');
+            loadSection(section);
+        });
+    });
+
+    composeButton.addEventListener('click', function() {
+        showComposeEmail();
+    });
+
+    sendButton.addEventListener('click', function() {
+        sendEmail();
+    });
+
+    saveDraftButton.addEventListener('click', function() {
+        saveDraft();
+    });
+
+    backButton.addEventListener('click', function() {
+        showEmailList();
+    });
+
+    function loadSection(section) {
+        composeEmail.style.display = 'none';
+        emailDetail.style.display = 'none';
+        emailList.style.display = 'block';
+        emailList.innerHTML = '';
+
+        emails[section].forEach(email => {
+            const emailItem = document.createElement('div');
+            emailItem.classList.add('email-item');
+            emailItem.setAttribute('data-id', email.id);
+            emailItem.innerHTML = `
+                <div class="email-sender">${email.sender}</div>
+                <div class="email-subject">${email.subject}</div>
+                <div class="email-snippet">${email.body.substring(0, 50)}...</div>
+                ${section !== 'trash' ? '<button class="trash-button">Trash</button>' : '<button class="restore-button">Restore</button>'}
+            `;
+            if (section !== 'trash') {
+                emailItem.querySelector('.trash-button').addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    trashEmail(section, email.id);
+                });
+            } else {
+                emailItem.querySelector('.restore-button').addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    restoreEmail(email.id);
+                });
+            }
+            emailItem.addEventListener('click', function() {
+                showEmailDetail(section, email.id);
+            });
+            emailList.appendChild(emailItem);
+        });
+    }
+
+    function showComposeEmail() {
+        composeEmail.style.display = 'flex';
+        emailList.style.display = 'none';
+        emailDetail.style.display = 'none';
+    }
+
+    function sendEmail() {
+        const to = document.getElementById('to').value;
+        const subject = document.getElementById('subject').value;
+        const body = document.getElementById('body').value;
+
+        if (to && subject && body) {
+            alert(`Email sent to: ${to}\nSubject: ${subject}\nBody: ${body}`);
+
+            emails.sent.push({ id: Date.now(), sender: 'You', subject, body });
+
+            document.getElementById('to').value = '';
+            document.getElementById('subject').value = '';
+            document.getElementById('body').value = '';
+
+            loadSection('sent');
+        } else {
+            alert('Please fill in all fields.');
+        }
+    }
+
+    function saveDraft() {
+        const to = document.getElementById('to').value;
+        const subject = document.getElementById('subject').value;
+        const body = document.getElementById('body').value;
+
+        if (subject || body) {
+            emails.drafts.push({ id: Date.now(), sender: 'You', subject, body });
+
+            document.getElementById('to').value = '';
+            document.getElementById('subject').value = '';
+            document.getElementById('body').value = '';
+
+            loadSection('drafts');
+        } else {
+            alert('Cannot save an empty draft.');
+        }
+    }
+
+    function showEmailDetail(section, id) {
+        emailList.style.display = 'none';
+        composeEmail.style.display = 'none';
+
+        const email = emails[section].find(e => e.id === id);
+
+        document.getElementById('detail-sender').textContent = email.sender;
+        document.getElementById('detail-subject').textContent = email.subject;
+        document.getElementById('detail-body').textContent = email.body;
+
+        emailDetail.style.display = 'block';
+    }
+
+    function showEmailList() {
+        emailDetail.style.display = 'none';
+        composeEmail.style.display = 'none';
+        emailList.style.display = 'block';
+    }
+
+    function trashEmail(section, id) {
+        const emailIndex = emails[section].findIndex(e => e.id === id);
+
+        if (emailIndex !== -1) {
+            const email = emails[section].splice(emailIndex, 1)[0];
+            emails.trash.push(email);
+            loadSection(section);
+        }
+    }
+
+    function restoreEmail(id) {
+        const emailIndex = emails.trash.findIndex(e => e.id === id);
+
+        if (emailIndex !== -1) {
+            const email = emails.trash.splice(emailIndex, 1)[0];
+
+            if (email.subject === 'Draft Email') {
+                emails.drafts.push(email);
+            } else if (email.sender === 'You') {
+                emails.sent.push(email);
+            } else {
+                emails.inbox.push(email);
+            }
+
+            loadSection('trash');
+        }
+    }
+
+    loadSection('inbox');
+});

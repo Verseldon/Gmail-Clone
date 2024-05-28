@@ -1,0 +1,230 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #d93025;
+    color: white;
+    padding: 10px 20px;
+}
+
+.header .logo img {
+    height: 30px;
+}
+
+.header .search-bar input {
+    width: 400px;
+    padding: 5px;
+}
+
+.header-right button {
+    background: none;
+    border: none;
+    color: white;
+    margin-left: 15px;
+    cursor: pointer;
+}
+
+.main {
+    display: flex;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #f1f3f4;
+    padding: 20px;
+    box-shadow: 1px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar button {
+    width: 100%;
+    padding: 10px;
+    background-color: #d93025;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.sidebar ul li:hover {
+    background-color: #ddd;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.toolbar button {
+    margin-right: 10px;
+    padding: 10px;
+    border: 1px solid #d1d1d1;
+    background-color: white;
+    cursor: pointer;
+}
+
+.email-list {
+    background-color: #fff;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.email-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    border-bottom: 1px solid #f1f1f1;
+    cursor: pointer;
+}
+
+.email-item:hover {
+    background-color: #f9f9f9;
+}
+
+.email-sender, .email-subject, .email-snippet {
+    flex: 1;
+    margin-right: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.email-sender {
+    flex-basis: 20%;
+}
+
+.email-subject {
+    flex-basis: 60%;
+}
+
+.email-snippet {
+    flex-basis: 20%;
+}
+
+.compose-email, .email-detail {
+    display: none;
+    flex-direction: column;
+}
+
+.compose-email form, .email-detail {
+    display: flex;
+    flex-direction: column;
+}
+
+.compose-email form input,
+.compose-email form textarea, .email-detail {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.compose-email form button, .email-detail button {
+    padding: 10px;
+    background-color: #d93025;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#login-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f1f3f4;
+}
+
+#login-page h2 {
+    margin-bottom: 20px;
+}
+
+#login-page form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#login-page input {
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 200px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#login-page button {
+    padding: 10px;
+    background-color: #d93025;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#register-page, #login-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f1f3f4;
+}
+
+#register-page h2, #login-page h2 {
+    margin-bottom: 20px;
+}
+
+#register-page form, #login-page form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#register-page input, #login-page input {
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 200px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#register-page button, #login-page button {
+    padding: 10px;
+    background-color: #d93025;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#register-page p, #login-page p {
+    margin-top: 10px;
+}
+
+#register-page a, #login-page a {
+    color: #d93025;
+    text-decoration: none;
+    cursor: pointer;
+}
