@@ -77,7 +77,7 @@ if (!isset($_SESSION['user_id'])) {
             <div class="header-right">
                 <span>Welcome, <?php echo $_SESSION['username']; ?></span>
                 <button onclick="window.location.href='logout.php'">Logout</button>
-                <button onclick="window.location.href='compose.php'">Compose</button>
+                <button onclick="window.location.href='home.php'">Home</button>
             </div>
         </div>
 
@@ -85,7 +85,7 @@ if (!isset($_SESSION['user_id'])) {
             <div class="sidebar">
                 <button id="compose-button" onclick="window.location.href='compose.php'">Compose</button>
                 <ul>
-                    <li class="sidebar-item" data-section="inbox">Inbox</li>
+                    <li class="sidebar-item" onclick="window.location.href='home.php'" data-section="inbox">Inbox</li>
                     <li class="sidebar-item" data-section="starred">Starred</li>
                     <li class="sidebar-item" data-section="sent">Sent</li>
                     <li class="sidebar-item" data-section="drafts">Drafts</li>
