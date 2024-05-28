@@ -59,6 +59,7 @@ $conn->close();
                 <input type="text" placeholder="Search mail">
             </div>
             <div class="header-right">
+                <span>Welcome, <?php echo $_SESSION['username']; ?></span>
                 <button onclick="window.location.href='logout.php'">Logout</button>
                 <button onclick="window.location.href='compose.php'">Compose</button>
             </div>
