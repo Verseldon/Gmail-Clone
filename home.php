@@ -84,11 +84,14 @@ $conn->close();
                 </div>
                 <div class="email-list" id="email-list">
                     <?php foreach ($emails as $email): ?>
-                        <div class="email-item">
-                            <div class="email-sender"><?php echo htmlspecialchars($email['sender_email']); ?></div>
-                            <div class="email-subject"><?php echo htmlspecialchars($email['subject']); ?></div>
-                            <div class="email-snippet"><?php echo htmlspecialchars(substr($email['body'], 0, 50)); ?>...</div>
-                        </div>
+                        <a href="view_email.php?email_id=<?php echo $email['id']; ?>" class="email-item-link">
+                            <div class="email-item">
+                                <div class="email-sender"><?php echo htmlspecialchars($email['sender_email']); ?></div>
+                                <div class="email-subject"><?php echo htmlspecialchars($email['subject']); ?></div>
+                                <div class="email-snippet"><?php echo htmlspecialchars(substr($email['body'], 0, 50)); ?>...</div>
+                                <button class="trash-button" onclick="trashEmail(<?php echo $email['id']; ?>)">Trash</button>
+                            </div>
+                        </a>
                     <?php endforeach; ?>
                 </div>
             </div>
