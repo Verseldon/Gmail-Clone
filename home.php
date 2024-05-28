@@ -23,9 +23,9 @@ $user_id = $_SESSION['user_id'];
 $stmt = $conn->prepare("
     SELECT emails.id, emails.subject, emails.body, users.username as sender 
     FROM inbox 
-    JOIN emails ON inbox.id = emails.id 
-    JOIN users ON inbox.e_sender = users.id 
-    WHERE emails.receiver = ?
+    JOIN emails ON inbox.email_id = emails.id 
+    JOIN users ON emails.sender_id = users.id 
+    WHERE inbox.user_id = ?
 ");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();

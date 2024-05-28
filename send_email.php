@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $to = $_POST["to"];
     $subject = $_POST["subject"];
     $body = $_POST["body"];
+    $sender_id = $_SESSION['user_id'];
 
     // Fetch receiver ID from users table
     $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
@@ -33,22 +34,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->fetch();
 
         // Insert email into emails table
-        $stmt = $conn->prepare("INSERT INTO emails (receiver, subject, body) VALUES (?, ?, ?)");
-        $stmt->bind_param("iss", $receiver_id, $subject, $body);
+        $stmt = $conn->prepare("INSERT INTO emails (sender_id, receiver_id, subject, body) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("iiss", $sender_id, $receiver_id, $subject, $body);
 
         if ($stmt->execute()) {
             $email_id = $stmt->insert_id; // Get the ID of the inserted email
 
             // Insert record into inbox table for the receiver
-            $sender_id = $_SESSION['user_id'];
-            $stmt = $conn->prepare("INSERT INTO inbox (id, e_sender) VALUES (?, ?)");
-            $stmt->bind_param("ii", $email_id, $sender_id);
+            $stmt = $conn->prepare("INSERT INTO inbox (user_id, email_id) VALUES (?, ?)");
+            $stmt->bind_param("ii", $receiver_id, $email_id);
 
             if ($stmt->execute()) {
                 // If the sender and receiver are the same, also insert into the sender's inbox
                 if ($receiver_id == $sender_id) {
-                    $stmt = $conn->prepare("INSERT INTO inbox (id, e_sender) VALUES (?, ?)");
-                    $stmt->bind_param("ii", $email_id, $sender_id);
+                    $stmt->bind_param("ii", $sender_id, $email_id);
                     $stmt->execute();
                 }
                 echo "Email stored successfully!";
